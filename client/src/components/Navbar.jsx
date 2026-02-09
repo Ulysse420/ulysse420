@@ -23,11 +23,13 @@ export default function Navbar() {
               <Link to="/messages" title="Messages">Messages</Link>
               <Link to={`/user/${user.username}`} title="Profile">Profile</Link>
               <Link to="/sessions" title="Sessions">Sessions</Link>
+              <Link to="/game" title="Game">Game</Link>
               <button onClick={handleLogout} className="btn-link">Logout</button>
             </>
           ) : (
             <>
               <Link to="/explore">Explore</Link>
+              <Link to="/game">Game</Link>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
             </>

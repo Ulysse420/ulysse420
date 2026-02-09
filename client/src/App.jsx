@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import NewPost from './pages/NewPost';
 import EditProfile from './pages/EditProfile';
 import Sessions from './pages/Sessions';
+import Game from './pages/Game';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/messages/:userId" element={<ProtectedRoute><Conversation /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
           <Route path="/sessions" element={<ProtectedRoute><Sessions /></ProtectedRoute>} />
+          <Route path="/game" element={<Game />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
