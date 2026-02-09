@@ -60,6 +60,19 @@ db.exec(`
     created_at  TEXT DEFAULT (datetime('now'))
   );
 
+  CREATE TABLE IF NOT EXISTS sessions (
+    id          TEXT PRIMARY KEY,
+    user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_jti   TEXT UNIQUE NOT NULL,
+    user_agent  TEXT DEFAULT '',
+    ip_address  TEXT DEFAULT '',
+    created_at  TEXT DEFAULT (datetime('now')),
+    last_active_at TEXT DEFAULT (datetime('now')),
+    is_active   INTEGER DEFAULT 1
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+  CREATE INDEX IF NOT EXISTS idx_sessions_jti ON sessions(token_jti);
   CREATE INDEX IF NOT EXISTS idx_posts_user ON posts(user_id);
   CREATE INDEX IF NOT EXISTS idx_posts_created ON posts(created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_comments_post ON comments(post_id);

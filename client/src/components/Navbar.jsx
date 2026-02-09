@@ -22,6 +22,7 @@ export default function Navbar() {
               <Link to="/new" title="New post">+ Post</Link>
               <Link to="/messages" title="Messages">Messages</Link>
               <Link to={`/user/${user.username}`} title="Profile">Profile</Link>
+              <Link to="/sessions" title="Sessions">Sessions</Link>
               <button onClick={handleLogout} className="btn-link">Logout</button>
             </>
           ) : (
