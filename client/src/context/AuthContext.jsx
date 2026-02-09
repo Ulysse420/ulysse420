@@ -33,7 +33,12 @@ export function AuthProvider({ children }) {
     return res.user;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await api.post('/api/auth/logout');
+    } catch {
+      // Best effort — clear locally regardless
+    }
     localStorage.removeItem('haven_token');
     setUser(null);
   };

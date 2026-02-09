@@ -61,7 +61,7 @@ export default function PostCard({ post, onUpdate }) {
           {liked ? '\u2665' : '\u2661'} {likeCount}
         </button>
         <Link to={`/post/${post.id}`} className="btn-icon">
-          \u{1F4AC} {post.commentCount}
+          {'\u{1F4AC}'} {post.commentCount}
         </Link>
       </div>
 

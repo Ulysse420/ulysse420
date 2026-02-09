@@ -36,7 +36,14 @@ router.post('/register', async (req, res) => {
       'INSERT INTO users (id, username, email, password, display_name) VALUES (?, ?, ?, ?, ?)'
     ).run(id, username, email, hashed, displayName || username);
 
-    const token = createToken(id);
+    const { token, jti } = createToken(id);
+
+    // Create session record
+    const sessionId = uuidv4();
+    db.prepare(
+      'INSERT INTO sessions (id, user_id, token_jti, user_agent, ip_address) VALUES (?, ?, ?, ?, ?)'
+    ).run(sessionId, id, jti, req.headers['user-agent'] || '', req.ip || '');
+
     res.status(201).json({ token, user: { id, username, displayName: displayName || username } });
   } catch (err) {
     console.error('Register error:', err);
@@ -60,7 +67,14 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = createToken(user.id);
+    const { token, jti } = createToken(user.id);
+
+    // Create session record
+    const sessionId = uuidv4();
+    db.prepare(
+      'INSERT INTO sessions (id, user_id, token_jti, user_agent, ip_address) VALUES (?, ?, ?, ?, ?)'
+    ).run(sessionId, user.id, jti, req.headers['user-agent'] || '', req.ip || '');
+
     res.json({
       token,
       user: {
@@ -94,6 +108,19 @@ router.get('/me', authenticate, (req, res) => {
     avatarUrl: user.avatar_url,
     createdAt: user.created_at,
   });
+});
+
+// POST /api/auth/logout
+router.post('/logout', authenticate, (req, res) => {
+  try {
+    if (req.tokenJti) {
+      db.prepare('UPDATE sessions SET is_active = 0 WHERE token_jti = ?').run(req.tokenJti);
+    }
+    res.json({ message: 'Logged out' });
+  } catch (err) {
+    console.error('Logout error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 module.exports = router;
