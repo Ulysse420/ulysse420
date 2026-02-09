@@ -3,6 +3,7 @@ dist/
 *.db
 *.db-journal
 *.db-wal
+*.db-shm
 server/uploads/*
 !server/uploads/.gitkeep
 .env
